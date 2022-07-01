@@ -33,6 +33,13 @@ int main()
     nums.push_back(2);
     nums.push_back(3);
     vector<vector<int>> ans = subset(nums);
-    
+     for(auto it: ans)
+    {
+        for(auto x : it)
+        {
+            cout<<x<<" ";
+        }
+        cout<<endl;
+    }
     return 0;
 }
