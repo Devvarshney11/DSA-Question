@@ -46,37 +46,31 @@ void display(node *head)
     }
     cout << endl;
 }
-node *reverseInPair(node *&head, int n, int k)
+void RemoveDuplicate(node *&head)
 {
-    if (head == 0 && n < k)
+    node *temp = head;
+    while(temp->next)
     {
-        return head;
-    }
-    else
-    {
-        node *current = head;
-        node *nextnode = head;
-        node *prev = 0;
-        for (int i = 1; i <= k; i++)
+        if(temp->data == temp->next->data)
         {
-            nextnode = current->next;
-            current->next = prev;
-            prev = current;
-            current = nextnode;
+            node *next_itr = temp->next->next;
+            delete temp->next;
+            temp->next= next_itr;
         }
-        head->next = reverseInPair(current, n - k, k);
-        return prev;
+        else
+        temp = temp->next;
     }
 }
 int main()
 {
     node *head = 0;
     insert(head,1);
+    insert(head,1);
+    insert(head,1);
     insert(head,2);
     insert(head,3);
     insert(head,4);
-    insert(head,5);
-    node *ans = reverseInPair(head,5,4);
-    display(ans);
+    RemoveDuplicate(head);
+    display(head);
     return 0;
 }

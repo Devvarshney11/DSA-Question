@@ -71,42 +71,101 @@ void display(node *head)
 //      }
 //      return res;
 //  }
+
+// //By Iterative Way;
+// node *mergeTwoList(node *head1, node *head2)
+// {
+//     if (head1 == 0)
+//     {
+//         return head2;
+//     }
+//     if (head2 == 0)
+//     {
+//         return head1;
+//     }
+//     node *ans = new node(0);
+//     node *temp = ans;
+//     while (head1 && head2)
+//     {
+//         if (head1->data <= head2->data)
+//         {
+//             ans->next = head1;
+//             ans = ans->next;
+//             head1 = head1->next;
+//         }
+//         else
+//         {
+//             ans->next = head2;
+//             ans = ans->next;
+//             head2 = head2->next;
+//         }
+//     }
+//    if(head1)
+//    {
+//      ans->next = head1;
+//    }
+//    if(head2)
+//    {
+//      ans->next = head2;
+//    }
+//    return temp->next;
+// }
+
+// By Insertion Method
+node *solve(node *head1, node *head2)
+{
+    //if only one node is present in list
+    if(head1->next == 0)
+    {
+        head1->next = head2;
+        return head1;
+    }
+    node *first = head1;
+    node *curr1 = first;
+    node *curr2 = head2;
+    node *next1 = curr1->next;
+    while(curr2 != NULL && next1 != NULL)
+    {
+        if(curr1->data<=curr2->data && curr2->data<=next1->data)
+        {
+            //Add node in between first list
+            curr1->next = curr2;
+            node *next2 = curr2->next;
+            curr2->next = next1;
+            curr1 = curr2;
+            curr2 = next2;
+        }
+        else
+        {
+            //Updating the next1 pointers
+            curr1 = next1;
+            next1 = next1->next;
+            if(next1 == NULL)
+            {
+                curr1->next = curr2;
+                return first;
+            }
+        }
+    }
+}
 node *mergeTwoList(node *head1, node *head2)
 {
     if (head1 == 0)
     {
         return head2;
     }
-    if (head2 == 0)
+    if(head2 == 0)
     {
         return head1;
     }
-    node *ans = new node(0);
-    node *temp = ans;
-    while (head1 && head2)
+    if(head1->data<head2->data)
     {
-        if (head1->data <= head2->data)
-        {
-            ans->next = head1;
-            ans = ans->next;
-            head1 = head1->next;
-        }
-        else
-        {
-            ans->next = head2;
-            ans = ans->next;
-            head2 = head2->next;
-        }
+        return solve(head1,head2);
     }
-   if(head1)
-   {
-     ans->next = head1;
-   }
-   if(head2)
-   {
-     ans->next = head2;
-   }
-   return temp->next;
+    else
+    {
+        return solve(head2,head1);
+    }
 }
 int main()
 {

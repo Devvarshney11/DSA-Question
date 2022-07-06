@@ -1,7 +1,12 @@
+// There are Three Apparoch to solve this
+// i - By taking one node and check duplicate in rest of the list
+// ii - By Sorting and check in sorted linked list
+// iii - By Hash Map
 #include <iostream>
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <set>
 
 using namespace std;
 class node
@@ -46,37 +51,40 @@ void display(node *head)
     }
     cout << endl;
 }
-node *reverseInPair(node *&head, int n, int k)
+void RemoveDuplicate(node *&head)
 {
-    if (head == 0 && n < k)
+    set<int> s;
+    node *temp = head;
+    node *prev = 0;
+    while (temp != 0)
     {
-        return head;
-    }
-    else
-    {
-        node *current = head;
-        node *nextnode = head;
-        node *prev = 0;
-        for (int i = 1; i <= k; i++)
+        if (!s.count(temp->data))
         {
-            nextnode = current->next;
-            current->next = prev;
-            prev = current;
-            current = nextnode;
+            s.insert(temp->data);
+            prev = temp;
+            temp = temp->next;
         }
-        head->next = reverseInPair(current, n - k, k);
-        return prev;
+        else
+        {
+            prev->next = temp->next;
+            delete temp;
+            temp = prev->next;
+        }
     }
 }
 int main()
 {
     node *head = 0;
-    insert(head,1);
-    insert(head,2);
-    insert(head,3);
-    insert(head,4);
-    insert(head,5);
-    node *ans = reverseInPair(head,5,4);
-    display(ans);
+    insert(head, 4);
+    insert(head, 2);
+    insert(head, 5);
+    insert(head, 10);
+    insert(head, 5);
+    insert(head, 2);
+    insert(head, 1);
+    insert(head, 2);
+    insert(head, 1);
+    RemoveDuplicate(head);
+    display(head);
     return 0;
 }

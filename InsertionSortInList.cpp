@@ -4,6 +4,7 @@
 #include <vector>
 
 using namespace std;
+
 class node
 {
 public:
@@ -21,6 +22,7 @@ public:
         next = 0;
     }
 };
+
 void insert(node *&head, int i)
 {
     node *n = new node(i);
@@ -36,6 +38,7 @@ void insert(node *&head, int i)
     }
     temp->next = n;
 }
+
 void display(node *head)
 {
     node *temp = head;
@@ -46,37 +49,51 @@ void display(node *head)
     }
     cout << endl;
 }
-node *reverseInPair(node *&head, int n, int k)
+void sorted(node *&s, node *temp)
 {
-    if (head == 0 && n < k)
+    if (s == 0 || s->data >= temp->data)
     {
-        return head;
+        temp->next = s;
+        s = temp;
     }
     else
     {
-        node *current = head;
-        node *nextnode = head;
-        node *prev = 0;
-        for (int i = 1; i <= k; i++)
+        node *itr = s;
+        while (itr->next && itr->next->data < temp->data)
         {
-            nextnode = current->next;
-            current->next = prev;
-            prev = current;
-            current = nextnode;
+            itr = itr->next;
         }
-        head->next = reverseInPair(current, n - k, k);
-        return prev;
+        temp->next = itr->next;
+        itr->next = temp;
     }
+}
+void insertionSort(node *&head)
+{
+    if (!head && !head->next)
+    {
+        return;
+    }
+    node *temp = head;
+    node *s = 0;
+    while (temp != 0)
+    {
+        node *n = temp->next;
+        sorted(s, temp);
+        temp = n;
+    }
+    head = s;
 }
 int main()
 {
     node *head = 0;
-    insert(head,1);
-    insert(head,2);
-    insert(head,3);
-    insert(head,4);
-    insert(head,5);
-    node *ans = reverseInPair(head,5,4);
-    display(ans);
+    insert(head, 5);
+    insert(head, 1);
+    insert(head, 3);
+    insert(head, 2);
+    insert(head, 6);
+    insert(head, 4);
+    display(head);
+    insertionSort(head);
+    display(head);
     return 0;
 }
