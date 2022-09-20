@@ -447,8 +447,8 @@ Node *mergeBST(Node *root1, Node *root2)
     int n = arr3.size() - 1;
     return create(arr3, 0, n);
 }
-//Apparoach 2
-// Convert BST to DLL
+// Apparoach 2
+//  Convert BST to DLL
 void convertBSTToDLL(Node *root, Node *&head)
 {
     if (root == 0)
@@ -464,7 +464,7 @@ void convertBSTToDLL(Node *root, Node *&head)
 
     convertBSTToDLL(root->left, head);
 }
-//Merge two sorted linked list
+// Merge two sorted linked list
 void mergeTwoSortedLinkedList(Node *head1, Node *head2, Node *&head3)
 {
     Node *temp1 = head1;
@@ -509,67 +509,68 @@ void mergeTwoSortedLinkedList(Node *head1, Node *head2, Node *&head3)
 int countNodes(Node *head)
 {
     int n = 0;
-    while(head)
+    while (head)
     {
         head = head->right;
         n++;
     }
     return n;
 }
-//Convert Linked List to Dll
-Node *convertLLToBST(Node *&head,int n)
+// Convert Linked List to Dll
+Node *convertLLToBST(Node *&head, int n)
 {
-    if(n<=0 || head == 0)
+    if (n <= 0 || head == 0)
         return 0;
-    Node *left = convertLLToBST(head,n/2);
+    Node *left = convertLLToBST(head, n / 2);
 
     Node *root = head;
     head = head->right;
-    
+
     root->left = left;
-    root->right = convertLLToBST(head,n-n/2-1);
+    root->right = convertLLToBST(head, n - n / 2 - 1);
 
     return root;
 }
-Node *mergeBST(Node *root1, Node *root2){
-      Node *head1 = 0;
-      convertBSTToDLL(root1,head1);
-      Node *head2 = 0;
-      convertBSTToDLL(root2,head2);
-      
-      Node *head3 = 0;
-      mergeTwoSortedLinkedList(head1,head2,head3);
-      
-      int n = countNodes(head3);
-    
-      return convertLLToBST(head3,n);
+Node *mergeBST(Node *root1, Node *root2)
+{
+    Node *head1 = 0;
+    convertBSTToDLL(root1, head1);
+    Node *head2 = 0;
+    convertBSTToDLL(root2, head2);
+
+    Node *head3 = 0;
+    mergeTwoSortedLinkedList(head1, head2, head3);
+
+    int n = countNodes(head3);
+
+    return convertLLToBST(head3, n);
 }
-//Size of Largest BST in a Binary Tree
+// Size of Largest BST in a Binary Tree
 class info
 {
-    public:
-    int mini;      //The value of smallest node in the tree
-    int maxi;      //The value of the largest node in the tree
-    bool isBST;    //Check statement if the tree is Bst or not 
-    int size;      //The size of the tree
+public:
+    int mini;   // The value of smallest node in the tree
+    int maxi;   // The value of the largest node in the tree
+    bool isBST; // Check statement if the tree is Bst or not
+    int size;   // The size of the tree
 };
-info solve(Node *root ,int &maxSize)
+info solve(Node *root, int &maxSize)
 {
-    if(root == 0)
+    if (root == 0)
     {
-        return {INT_MIN,INT_MAX,true,0};
+        return {INT_MIN, INT_MAX, true, 0};
     }
-    info left = solve(root->left,maxSize);
-    info right = solve(root->right,maxSize);
+    info left = solve(root->left, maxSize);
+    info right = solve(root->right, maxSize);
 
     info currBST;
 
-    currBST.mini = min(root->data,left.mini);
-    currBST.maxi = max(root->data,right.maxi);
+    currBST.mini = min(root->data, left.mini);
+    currBST.maxi = max(root->data, right.maxi);
 
     currBST.size = left.size + right.size + 1;
 
-    if(left.isBST && right.isBST && root->data>left.maxi && root->data<right.mini)
+    if (left.isBST && right.isBST && root->data > left.maxi && root->data < right.mini)
     {
         currBST.isBST = true;
     }
@@ -577,18 +578,109 @@ info solve(Node *root ,int &maxSize)
     {
         currBST.isBST = false;
     }
-    if(currBST.isBST)
+    if (currBST.isBST)
     {
-        maxSize = max(maxSize,currBST.size);
+        maxSize = max(maxSize, currBST.size);
     }
 }
-int largestBST(Node* root) 
+int largestBST(Node *root)
 {
     int maxSize = 0;
-    info temp = solve(root,maxSize);
+    info temp = solve(root, maxSize);
     return maxSize;
 }
+// Algorithm for filling the nextsibling pointer
+class node
+{
+public:
+    int data;
+    node *nextSibling;
+    node *left;
+    node *right;
 
+    node(int data)
+    {
+        this->data = data;
+        nextSibling = 0;
+        left = 0;
+        right = 0;
+    }
+};
+// By iteration
+// void fillNextSibling(node *&root)
+// {
+//     if (root == 0)
+//         return;
+//     queue<node*> q;
+//     q.push(root);
+//     q.push(0);
+//     while(!q.empty())
+//     {
+//         node *temp = q.front();
+//         q.pop();
+//         if(temp == 0)
+//         {
+//             if(!q.empty())
+//             {
+//                 q.push(0);
+//             }
+//         }
+//         else
+//         {
+//             temp->nextSibling = q.front();
+//             if(temp->left)
+//                 q.push(temp->left);
+//             if(temp->right)
+//                 q.push(temp->right);
+//         }
+//     }
+// }
+// By recursion
+void fillNextSibling(node *root)
+{
+    if (root == 0)
+        return;
+    root->left->nextSibling = root->right;
+    root->right->nextSibling = (root->nextSibling->left) ? root->nextSibling->left : 0;
+
+    fillNextSibling(root->left);
+    fillNextSibling(root->right);
+}
+// Given a BST of size n , in which each node r has an additional field r->size,
+// The number of sub tree rooted at r(including the root node r),we have to write algo to find
+// the number nodes strictly greater than k;
+class tree
+{
+public:
+    int data;
+    tree *left;
+    tree *right;
+    int size;
+};
+int greaterThanK(tree *root, int k)
+{
+    if (root == 0)
+        return 0;
+    int n = 0;
+    while (root)
+    {
+        if (k < root->data)
+        {
+            n += root->right->size + 1;
+            root = root->left;
+        }
+        else if (k > root->data)
+        {
+            root = root->right;
+        }
+        else
+        {
+            n += root->right->size;
+            break;
+        }
+    }
+    return n;
+}
 int main()
 {
     Node *root = 0;
