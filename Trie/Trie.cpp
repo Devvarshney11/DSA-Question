@@ -37,6 +37,7 @@ public:
     {
         if (word.length() == 0)
         {
+            root->isTerminal = true;
             return;
         }
         int index = word[0] - 'A';
