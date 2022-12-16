@@ -67,7 +67,7 @@ string infixToPostFix(string str)
 }
 int main()
 {
-    string str = "a-b/c*d+e";
+    string str = "A*(B+C*(D+E))/(F*(G+H))";
     cout<<infixToPostFix(str);
     return 0;
 }
