@@ -1,45 +1,109 @@
-#include <iostream>
-#include <algorithm>
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-void solve(vector<int> nums, vector<int> output, int index, vector<vector<int>> &ans)
+class Node
 {
-    if (index == nums.size())
+public:
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int data)
     {
-        ans.push_back(output);
+        this->data = data;
+        this->left = left;
+        this->right = right;
+    }
+};
+
+Node *insert(Node *root, int key)
+{
+    if (root == 0)
+    {
+        Node *n = new Node(key);
+        root = n;
+        return root;
+    }
+    if (root->data > key)
+        root->left = insert(root->left, key);
+    else if (root->data < key)
+        root->right = insert(root->right, key);
+    else
+        cout << "Duplicate not allowed" << endl;
+    return root;
+}
+Node *maxEle(Node *root)
+{
+    if (root == 0)
+        return NULL;
+    Node *temp = root;
+    while (temp->right)
+    {
+        temp = temp->right;
+    }
+    return temp;
+}
+Node *minEle(Node *root)
+{
+    if (root == 0)
+        return NULL;
+    Node *temp = root;
+    while (temp->left)
+    {
+        temp = temp->left;
+    }
+    return temp;
+}
+Node *deleteion(Node *root, int val)
+{
+    if (root == 0)
+    {
+        cout << "Node not found" << endl;
         return;
     }
-    // exclude
-    solve(nums, output, index + 1, ans);
-    // include
-    output.push_back(nums[index]);
-    solve(nums, output, index + 1, ans);
+    if (root->data > val)
+    {
+        root->left = deleteion(root->left, val)
+    }
+    else if(root->data < val)
+    {
+        root->right = deleteion(root->right,val);
+    }
+    else 
+    {
+        if(!root->left)
+        {
+            Node*temp = root->right;
+            delete root;
+            return temp;
+        }
+        else if(!root->right)
+        {
+            Node *temp = root->left;
+            delete root;
+            return temp;
+        }
+        else 
+        {
+            Node *max = maxEle(root);
+
+        }
+    }
 }
-vector<vector<int>> subset(vector<int> nums)
+//flatten BST into linked list
+void flattenBST(Node *root,Node *&head)
 {
-    int index = 0;
-    vector<int> output;
-    vector<vector<int>> ans;
-    solve(nums,output,index,ans);
-    return ans;
+    if(root == 0)
+        return;
+    flattenBST(root->right,head);
+    root->right = head;
+    if(head == 0)
+        head->left = 0;
+    head = root;
+    flattenBST(root->left,head);
 }
 int main()
 {
-    vector<int> nums;
-    nums.push_back(1);
-    nums.push_back(2);
-    nums.push_back(3);
-    vector<vector<int>> ans = subset(nums);
-     for(auto it: ans)
-    {
-        for(auto x : it)
-        {
-            cout<<x<<" ";
-        }
-        cout<<endl;
-    }
     return 0;
 }
